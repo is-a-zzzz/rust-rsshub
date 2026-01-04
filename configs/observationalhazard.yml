@@ -1,0 +1,37 @@
+plugin:
+  name: "observationalhazard"
+  description: "David Kopec's blog RSS feed"
+  version: "1.0.0"
+  author: "RSSHub"
+
+source:
+  type: "html"
+  url: "https://www.observationalhazard.com/"
+  encoding: "utf-8"
+  request:
+    method: "GET"
+    timeout: 30
+    headers:
+      Accept: "text/html,application/xhtml+xml,application/xml"
+      User-Agent: "Mozilla/5.0 (compatible; RSSHub/1.0)"
+
+parser:
+  list:
+    selector: "article.post.hentry"
+    link_selector: "h2.post-title.entry-title a"
+    title_selector: "h2.post-title.entry-title a"
+    description_selector: ".post-body.entry-content"
+    date_selector: ".entry-date"
+    date_format: "%B %d, %Y"
+
+cache:
+  enabled: true
+  ttl: 3600
+
+feed:
+  title: "Observational Hazard"
+  description: "David Kopec's blog about programming, computer science, and technology"
+  link: "https://www.observationalhazard.com/"
+  language: "en"
+  format: "rss"
+  limit: 20

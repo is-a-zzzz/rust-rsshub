@@ -1,0 +1,47 @@
+plugin:
+  name: "test-example"
+  description: "Test example plugin for parsing"
+  version: "1.0.0"
+  author: "Test Author"
+
+source:
+  type: "html"
+  url: "https://example.com"
+  encoding: "utf-8"
+  user_agent: "Mozilla/5.0 (compatible; RSSHub/1.0)"
+  request:
+    method: "GET"
+    timeout: 30
+    headers:
+      Accept: "text/html,application/xhtml+xml,application/xml"
+
+parser:
+  list:
+    selector: "div.post"
+    item_selector: "div.post-item"
+    link_selector: "a.post-link"
+    title_selector: "h2.post-title"
+    description_selector: "p.post-excerpt"
+    date_selector: "time.post-date"
+    date_format: "%Y-%m-%d"
+    author_selector: "span.author"
+    category_selector: "span.category"
+
+  content:
+    selector: "div.post-content"
+    content_selector: "div.article-body"
+    cleanup_selectors:
+      - "div.ads"
+      - "div.related-posts"
+
+cache:
+  enabled: true
+  ttl: 3600
+
+feed:
+  title: "Example Feed"
+  description: "Example RSS Feed"
+  link: "https://example.com"
+  language: "en"
+  format: "rss"
+  limit: 20

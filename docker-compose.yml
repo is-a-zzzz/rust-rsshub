@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  rsshub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rust-rsshub
+    ports:
+      - "3001:3000"
+    volumes:
+      # 挂载配置目录
+      - ./configs:/app/configs:ro
+    environment:
+      - RUST_LOG=info
+      - PORT=3000
+      - CONFIGS_DIR=/app/configs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

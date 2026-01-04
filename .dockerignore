@@ -1,0 +1,10 @@
+target/
+Dockerfile
+.dockerignore
+docker-compose.yml
+.git
+.gitignore
+*.md
+docs/
+tests/
+.env
