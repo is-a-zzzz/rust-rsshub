@@ -1,0 +1,37 @@
+plugin:
+  name: "iczelia"
+  description: "Kamila Szewczyk's personal blog RSS feed"
+  version: "1.0.0"
+  author: "RSSHub"
+
+source:
+  type: "html"
+  url: "https://iczelia.net/"
+  encoding: "utf-8"
+  request:
+    method: "GET"
+    timeout: 30
+    headers:
+      Accept: "text/html,application/xhtml+xml,application/xml"
+      User-Agent: "Mozilla/5.0 (compatible; RSSHub/1.0)"
+
+parser:
+  list:
+    selector: "article.post.on-list"
+    link_selector: "h1.post-title a"
+    title_selector: "h1.post-title a"
+    description_selector: "div.post-content"
+    date_selector: "time.post-date"
+    date_format: "%Y-%m-%d"
+
+cache:
+  enabled: true
+  ttl: 3600
+
+feed:
+  title: "Kamila Szewczyk's Blog"
+  description: "Trivia for people who already know everything"
+  link: "https://iczelia.net/"
+  language: "en"
+  format: "rss"
+  limit: 20

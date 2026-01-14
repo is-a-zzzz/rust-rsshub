@@ -29,7 +29,7 @@ async fn main() -> anyhow::Result<()> {
 
     // 启动服务器
     let port = std::env::var("PORT")
-        .unwrap_or_else(|_| "3000".to_string())
+        .unwrap_or_else(|_| "3001".to_string())
         .parse::<u16>()?;
 
     let addr = format!("0.0.0.0:{}", port);

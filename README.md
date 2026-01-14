@@ -25,7 +25,7 @@ cd rust-rsshub
 cargo run
 
 # 访问
-curl http://localhost:3000/rss/observationalhazard
+curl http://localhost:3001/rss/observationalhazard
 ```
 
 ### 使用 Docker
@@ -84,7 +84,7 @@ feed:
 3. **立即访问**，无需重启:
 
 ```bash
-curl http://localhost:3000/rss/mysite
+curl http://localhost:3001/rss/mysite
 ```
 
 ## API 端点
@@ -99,7 +99,7 @@ curl http://localhost:3000/rss/mysite
 
 ## 环境变量
 
-- `PORT`: 服务器端口（默认: 3000）
+- `PORT`: 服务器端口（默认: 3001）
 - `CONFIGS_DIR`: 配置文件目录（默认: configs）
 - `RUST_LOG`: 日志级别（默认: info）
 
