@@ -245,10 +245,6 @@ parser:
       - "div.ads"
       - "script"
 
-cache:
-  enabled: true
-  ttl: 3600
-
 feed:
   title: "My Blog"
   description: "My RSS Feed"

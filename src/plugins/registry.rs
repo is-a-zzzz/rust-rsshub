@@ -1,7 +1,7 @@
 use crate::error::{Result, RssHubError};
 use crate::config::types::{PluginConfig, RssFeed};
 use crate::config::ConfigParser;
-use crate::fetcher::{HttpFetcher, MemoryCache};
+use crate::fetcher::HttpFetcher;
 use crate::parser::HtmlParser;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -10,7 +10,6 @@ use std::time::SystemTime;
 pub struct PluginRegistry {
     config_parser: ConfigParser,
     http_fetcher: Arc<HttpFetcher>,
-    cache: Arc<RwLock<MemoryCache>>,
     plugin_cache: Arc<RwLock<std::collections::HashMap<String, CachedPlugin>>>,
 }
 
@@ -24,7 +23,6 @@ impl PluginRegistry {
         Ok(Self {
             config_parser: ConfigParser::new(configs_dir),
             http_fetcher: Arc::new(HttpFetcher::new()?),
-            cache: Arc::new(RwLock::new(MemoryCache::new(3600))),
             plugin_cache: Arc::new(RwLock::new(std::collections::HashMap::new())),
         })
     }
@@ -63,17 +61,6 @@ impl PluginRegistry {
 
     /// 执行插件
     pub async fn execute_plugin(&self, config: &PluginConfig) -> Result<RssFeed> {
-        // 检查缓存
-        let cache_key = format!("feed:{}:{}", config.plugin.name,
-            chrono::Utc::now().format("%Y%m%d%H"));
-
-        if config.cache.enabled {
-            if let Some(cached) = self.cache.read().await.get(&cache_key).await {
-                // 返回缓存的 RSS
-                return Ok(serde_json::from_str(&cached)?);
-            }
-        }
-
         // 获取内容
         let html = self.http_fetcher.fetch_html(&config.source).await?;
 
@@ -96,12 +83,6 @@ impl PluginRegistry {
             articles,
         };
 
-        // 缓存结果
-        if config.cache.enabled {
-            let serialized = serde_json::to_string(&feed)?;
-            self.cache.write().await.set(cache_key, serialized).await;
-        }
-
         Ok(feed)
     }
 
@@ -120,7 +101,6 @@ impl PluginRegistry {
     pub async fn invalidate_all(&self) {
         let mut cache = self.plugin_cache.write().await;
         cache.clear();
-        self.cache.write().await.clear().await;
     }
 }
 

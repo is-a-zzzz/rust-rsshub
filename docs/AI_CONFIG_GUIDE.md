@@ -52,13 +52,12 @@ feed:
 
 ## 配置文件结构
 
-配置文件是 YAML 格式，包含 5 个主要部分：
+配置文件是 YAML 格式，包含 4 个主要部分：
 
 ```yaml
 plugin:      # 插件元数据
 source:      # 数据源配置
 parser:      # 解析规则
-cache:       # 缓存配置（可选）
 feed:        # Feed 输出配置
 ```
 
@@ -192,23 +191,7 @@ parser:
 
 ---
 
-### 4. cache（缓存配置）
-
-| 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `enabled` | boolean | true | 是否启用缓存 |
-| `ttl` | integer | 3600 | 缓存时间（秒） |
-
-**示例：**
-```yaml
-cache:
-  enabled: true
-  ttl: 1800  # 30 分钟
-```
-
----
-
-### 5. feed（Feed 输出配置）
+### 4. feed（Feed 输出配置）
 
 | 字段 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
@@ -349,10 +332,6 @@ parser:
     date_selector: "time.post-date"
     date_format: "%Y-%m-%d"
 
-cache:
-  enabled: true
-  ttl: 3600
-
 feed:
   title: "Kamila Szewczyk's Blog"
   description: "Trivia for people who already know everything"
@@ -434,10 +413,6 @@ parser:
       - "div.sidebar"
       - "script"
       - "iframe"
-
-cache:
-  enabled: true
-  ttl: 1800
 
 feed:
   title: "Tech Blog"
@@ -635,9 +610,6 @@ source:
       Connection: "keep-alive"
       Referer: "https://example.com"
     timeout: 60  # 增加超时时间
-
-cache:
-  ttl: 7200  # 减少请求频率（2 小时）
 ```
 
 ---
@@ -668,16 +640,13 @@ selector: "div.post-item"          # 也可以
 feed:
   limit: 10  # 只取前 10 篇
 
-# 使用缓存
-cache:
-  enabled: true
-  ttl: 3600  # 1 小时缓存
-
 # 设置超时
 source:
   request:
     timeout: 30  # 30 秒超时
 ```
+
+**注意：** 服务现在采用实时抓取模式，每次请求都会从源网站获取最新内容。为避免对源网站造成过大压力，建议 RSS 阅读器端控制刷新频率。
 
 ### 3. 错误处理
 
@@ -772,6 +741,24 @@ plugin:
 
 ---
 
+## 重要说明
+
+### 实时抓取模式
+
+本服务采用实时抓取模式：
+- 每次请求都会从源网站获取最新内容
+- 无缓存机制，确保数据实时性
+- 配置文件修改后自动生效，无需重启
+
+### 使用建议
+
+为避免对源网站造成过大请求压力：
+1. 在 RSS 阅读器中设置合理的刷新间隔（建议 30 分钟以上）
+2. 对于更新不频繁的网站，可设置更长的刷新间隔
+3. 多个订阅源建议分散刷新时间
+
+---
+
 ## 联系与反馈
 
 如有问题或建议，请：
@@ -779,4 +766,3 @@ plugin:
 2. 查看现有配置文件示例
 3. 运行测试验证配置
 
-**记住：配置文件热加载生效，修改后无需重启服务！**

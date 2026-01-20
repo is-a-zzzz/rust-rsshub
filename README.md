@@ -12,9 +12,10 @@
 - ✅ **零配置启动**: 无需预加载配置，访问时动态加载
 - ✅ **配置驱动**: 通过 YAML 文件定义解析规则，无需编写代码
 - ✅ **自动热重载**: 修改配置文件后自动生效，无需重启
-- ✅ **多格式支持**: 支持 RSS 2.0 和 Atom 1.0
-- ✅ **智能缓存**: 内置内存缓存，提升性能
+- ✅ **实时抓取**: 每次请求都实时获取最新内容，无缓存延迟
+- ✅ **多格式支持**: 支持 RSS 2.0 格式
 - ✅ **高性能**: 基于 Rust 和 Tokio 异步运行时
+- ✅ **极小镜像**: Docker 镜像仅 7MB，基于 scratch 裸镜像
 - ✅ **Docker 部署**: 一键部署，易于扩展
 
 ## 快速开始
@@ -87,10 +88,6 @@ parser:
     date_selector: "span.date"
     date_format: "%Y-%m-%d"
 
-cache:
-  enabled: true
-  ttl: 3600
-
 feed:
   title: "My Blog"
   description: "My Blog Feed"
@@ -113,8 +110,7 @@ curl http://localhost:3001/rss/mysite
 | `/` | GET | 欢迎页面 |
 | `/health` | GET | 健康检查 |
 | `/plugins` | GET | 列出所有插件 |
-| `/rss/:name` | GET | 获取 RSS 订阅 |
-| `/rss/:name?format=atom` | GET | 获取 Atom 订阅 |
+| `/rss/:name` | GET | 获取 RSS 订阅（实时抓取） |
 
 ## 环境变量
 
@@ -131,14 +127,16 @@ rust-rsshub/
 │   ├── lib.rs            # 库入口
 │   ├── error.rs          # 错误处理
 │   ├── config/           # 配置系统
-│   ├── fetcher/          # HTTP客户端和缓存
+│   ├── fetcher/          # HTTP客户端
 │   ├── parser/           # HTML解析器
-│   ├── generator/        # RSS生成器
-│   ├── router/           # Web路由
-│   └── plugins/          # 插件系统
+│   ├── plugins/          # 插件注册和管理
+│   └── router/           # Web路由
 ├── configs/              # 配置文件目录
 ├── tests/                # 测试
+├── docs/                 # 文档
 ├── Cargo.toml            # 项目配置
+├── Dockerfile            # Docker构建文件
+├── docker-compose.yml    # Docker Compose配置
 └── README.md             # 本文件
 ```
 
@@ -154,7 +152,7 @@ rust-rsshub/
 
 ## 开发状态
 
-当前开发进度: **70%** (阶段 7/10 完成)
+当前开发进度: **90%** (核心功能已完成)
 
 ### ✅ 已完成
 - 项目初始化
@@ -166,11 +164,13 @@ rust-rsshub/
 - Web 服务器和路由
 - 插件系统核心
 - 主程序实现
-
-### 🔄 待完成
-- 更多示例配置
 - Docker 部署配置
 - 完整文档
+
+### 🔄 未来改进
+- 支持更多内容格式（JSON、XML）
+- 支持内容页深度抓取
+- 添加更多示例配置
 
 ## 测试
 

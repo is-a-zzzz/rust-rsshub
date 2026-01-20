@@ -1,0 +1,37 @@
+plugin:
+  name: "jgc"
+  description: "John Graham-Cumming's blog RSS feed"
+  version: "1.0.0"
+  author: "RSSHub"
+
+source:
+  type: "html"
+  url: "https://blog.jgc.org/"
+  encoding: "utf-8"
+  request:
+    method: "GET"
+    timeout: 30
+    headers:
+      Accept: "text/html,application/xhtml+xml,application/xml"
+      User-Agent: "Mozilla/5.0 (compatible; RSSHub/1.0)"
+
+parser:
+  list:
+    selector: "div.post.hentry"
+    link_selector: "h3.post-title.entry-title a"
+    title_selector: "h3.post-title.entry-title a"
+    description_selector: "div.post-body.entry-content"
+    date_selector: "abbr.published"
+    date_format: "%B %d, %Y"
+
+cache:
+  enabled: true
+  ttl: 3600
+
+feed:
+  title: "John Graham-Cumming's Blog"
+  description: "John Graham-Cumming's personal blog"
+  link: "https://blog.jgc.org/"
+  language: "en"
+  format: "rss"
+  limit: 20

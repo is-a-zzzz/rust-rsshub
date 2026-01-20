@@ -13,8 +13,8 @@ axum = { version = "0.7", features = ["multipart"] }
 tower = "0.5"
 tower-http = { version = "0.5", features = ["cors", "trace", "compression-gzip"] }
 
-# HTTP 客户端
-reqwest = { version = "0.12", features = ["json", "cookies"] }
+# HTTP 客户端 (使用 rustls 实现，可静态编译)
+reqwest = { version = "0.12", features = ["json", "cookies", "rustls-tls"], default-features = false }
 
 # HTML 解析
 scraper = "0.20"
@@ -43,9 +43,6 @@ thiserror = "1.0"
 # 配置和环境变量
 config = "0.14"
 
-# 文件系统监控(可选)
-notify = { version = "6.1", optional = true }
-
 # URL 处理
 url = "2.5"
 
@@ -54,10 +51,6 @@ encoding_rs = "0.8"
 
 [dev-dependencies]
 tokio-test = "0.4"
-
-[features]
-default = ["file-watch"]
-file-watch = ["notify"]
 
 [[bin]]
 name = "rust-rsshub"
